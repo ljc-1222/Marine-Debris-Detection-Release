@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "columns": ["image_filename", "label_id", "x", "y", "w", "h", "confidence"],
+  "label_id_range": [0, 33],
+  "box_format": "xywh_pixels",
+  "coordinate_system": "encoded_image_pixels",
+  "clip_to_image_bounds": true,
+  "decimal_places": 6,
+  "max_detections_per_image": 100
+}

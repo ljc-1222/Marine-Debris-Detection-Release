@@ -1,0 +1,284 @@
+schema_version: 1
+data_contract:
+  classes: 34
+  training_image_order_sha256: 4fa948e9c3f9fa2e8cf02162b721cbbeae8f51e7c4a2a12b31a059058b353373
+  source_annotations_sha256: 959e6409b9c915c46289bf8364d2fd5f25ddaaeff3194729234faddab69c66da
+  source_dcr_records_sha256: 8cf7b21f3956e0df12de8e2b875eedfca7960cde510d8916b52428be081bad92
+  source_sam_masks_sha256: 8ed4294a3219a161fe32edee6c2143c5e756f6e1f2eb5590d5587a33c17787fc
+  sam_bank_repo: MarineDebrisImageRecognition/marine-debris-data-derived
+  sam_bank_revision: 271c7f908f0e97aba9dd70519a0d2d2b58e2129c
+  source_sam_bank_pipeline_sha256: 507c1869df8e314730b76c1737edcbcd679a9ba0b59eceaa996fa661d1a58858
+  detector_images: data/images/train_all
+  detector_annotations: data/annotations/instances_train_all.json
+  detector_dataset_yaml: data/yolo_train_all.yaml
+  sam_object_bank: data/augmentation/sam_object_bank
+  sam_mask_annotations: data/augmentation/instances_train_sam.json
+  dcr_records: data/dcr/train_all.records.jsonl
+  checkpoint_export: fixed_epoch_or_update_only
+
+detectors:
+  codetr:
+    architecture: Co-DINO 5-scale ViT-L/16
+    source_config: third_party/Co-DETR/projects/configs/co_dino_vit/co_dino_5scale_vit_large_coco.py
+    initialization:
+      repo: zongzhuofan/co-detr-vit-large-objects365
+      revision: adb854bf5fa409d15d45452f906fbccf6e60fdab
+      sha256: cc56e0dcdedbd5745e31537bef4889f4691af4ce1e5841f0c8acc6a6c5acfb1a
+    epochs: 20
+    devices: 2
+    batch_per_device: 1
+    gradient_accumulation: 16
+    optimizer: AdamW
+    learning_rate: 0.00005
+    layer_decay: 0.8
+    lr_step_epochs: [6]
+    gradient_clip: 0.1
+    precision: bf16
+    ema: true
+    inference_size: [2048, 1280]
+    sam_copy_paste: &sam_copy_paste
+      implementation: training/sam_copy_paste.py
+      enabled: true
+      artifact_root: data/augmentation/sam_object_bank
+      bank_pipeline_sha256: 507c1869df8e314730b76c1737edcbcd679a9ba0b59eceaa996fa661d1a58858
+      base_images: 16704
+      bank_objects: 10647
+      seed: 42
+      target_sample_probability: 0.5
+      class_weights: {23: 2.0, 29: 1.0, 30: 3.0, 31: 2.0}
+      excluded_classes: [19, 26, 32]
+      min_objects: 1
+      max_objects: 2
+      scale_range: [0.8, 1.2]
+      max_gt_iou: 0.1
+      max_source_reuse_per_epoch: 2
+      schedule:
+        - {epochs: [0, 1], copy_paste_probability: 0.0}
+        - {epochs: [2, 9], copy_paste_probability: 0.25}
+        - {epochs: [10, 15], copy_paste_probability: 0.5}
+        - {epochs: [16, 19], copy_paste_probability: 0.0}
+  tinyformer:
+    architecture: TinyFormer-XL-PBM
+    source_config: third_party/TinyFormer/configs/tinyformer/object365/tinyformer_dinov3_xl_obj2coco_pbm_24e.yml
+    source_revision: 9075d9fdf5ce989ca3c7e830a780dfc7fbbe4ec1
+    initialization_url: https://drive.google.com/uc?id=1aYISCCPtuNv4-upAObc9YXhgG0h0F3KV
+    initialization_bytes: 2036103254
+    initialization_sha256: 8c4ae5aa7d1ee9fc317cf513104d5787ac37130c8c6d4ea378e2f69eedbad2c7
+    epochs: 20
+    batch: 8
+    gradient_accumulation: 8
+    seed: 42
+    workers: 12
+    precision: bf16-mixed
+    gradient_clip: 0.1
+    resolution: 960
+    learning_rate: 0.0003
+    lr_gamma: 0.5
+    flat_epoch: 16
+    no_aug_epoch: 1
+    ema_decay: 0.999
+    ema_warmups: 1000
+    warmup_iter: 0
+    augmentation_policy_epochs: [4, 16, 20]
+    mixup_epochs: [4, 16]
+    copyblend_epochs: [4, 16]
+    multi_scale_stop_epoch: 20
+    sam_copy_paste:
+      <<: *sam_copy_paste
+      base_images: 16618
+  rfdetr:
+    architecture: RFDETRLargeDeprecated
+    package: rfdetr==1.9.0
+    initialization_sha256: 86879a31a42ea4c091ee8d758654bf5c8c465f773f08e95a9143653f0f529cba
+    epochs: 40
+    batch: 4
+    gradient_accumulation: 16
+    seed: 42
+    workers: 8
+    precision: bf16-mixed
+    gradient_clip: 0.1
+    warmup_epochs: 0.0
+    resolution: 952
+    learning_rate: 0.0002
+    encoder_learning_rate: 0.00015
+    drop_path: 0.1
+    weight_decay: 0.0001
+    lr_drop: 10
+    ema: true
+    sam_copy_paste:
+      implementation: training/rfdetr_copy_paste.py
+      enabled: true
+      mask_annotations: data/augmentation/instances_train_sam.json
+      mask_annotations_bytes: 50677726
+      mask_annotations_sha256: 8ed4294a3219a161fe32edee6c2143c5e756f6e1f2eb5590d5587a33c17787fc
+      donor_count: 18323
+      image_root: data/images/train_all
+      target_classes: []
+      target_sample_probability: 0.5
+      class_weights:
+        cigarette_pack: 2.0
+        foam_container: 1.0
+        non_pet_food_container: 3.0
+        non_food_plastic_container: 2.0
+      excluded_classes: [other, anthropogenic_fragment, aluminum_packaging]
+      probability: 0.5
+      max_pastes: 2
+      scale_min: 0.8
+      scale_max: 1.2
+      max_overlap_fraction: 0.1
+      placement_attempts: 20
+      sampling: uniform
+      start_epoch: 0
+      end_epoch: null
+      schedule:
+        - {epochs: [0, 1], copy_paste_probability: 0.0}
+        - {epochs: [2, 9], copy_paste_probability: 0.25}
+        - {epochs: [10, 15], copy_paste_probability: 0.5}
+        - {epochs: [16, 39], copy_paste_probability: 0.0}
+  yolo26:
+    architecture: YOLO26x
+    source_revision: dad7bb4534c95021bc14969ab25d77b77c4efdc3
+    initialization_filename: yolo26x.pt
+    initialization_url: https://github.com/ultralytics/assets/releases/download/v8.4.0/yolo26x.pt
+    initialization_bytes: 118667365
+    initialization_sha256: 9fdd44a31c504547ffb81d2c6d9e6dac3493c8eaa8b0398d3f43bae6c7003e92
+    seed: 42
+    workers: 8
+    batch: 8
+    nominal_batch: 64
+    resolution: 960
+    optimizer: MuSGD
+    final_lr_ratio: 0.1
+    momentum: 0.94
+    weight_decay: 0.001
+    box: 7.5
+    cls: 0.6
+    cls_pw: 0.15
+    dfl: 1.4
+    augmentation: &yolo_augmentation
+      initial:
+        degrees: 0.5
+        translate: 0.1
+        scale: 0.35
+        shear: 0.00136
+        perspective: 0.0003
+        fliplr: 0.5
+        flipud: 0.0015
+        hsv_h: 0.01315
+        hsv_s: 0.35348
+        hsv_v: 0.19383
+        mosaic: 0.3
+      final: {degrees: 0.5, fliplr: 0.5, flipud: 0.0015}
+      final_disabled: [albumentations, bgr, copy_paste, cutmix, hsv_h, hsv_s, hsv_v, mixup, mosaic, perspective, scale, shear, translate]
+    stages:
+      stage1:
+        epochs: 40
+        fixed_export_epoch: 40
+        learning_rate: 0.001
+        warmup_epochs: 3.0
+        freeze: 0
+        augmentation:
+          <<: *yolo_augmentation
+          final_stage_start_epoch: 31
+      stage2:
+        epochs: 8
+        fixed_export_epoch: 7
+        learning_rate: 0.0001
+        warmup_epochs: 1.0
+        freeze: 10
+        augmentation:
+          <<: *yolo_augmentation
+          final_stage_start_epoch: 5
+
+dcr:
+  common:
+    records: data/dcr/train_all.records.jsonl
+    foreground_classes: 34
+    background_label: 34
+    input_size: 384
+    context_scale: 1.2
+    epochs: 16
+    warmup_epochs: 1
+    foreground_to_background: [2, 1]
+    label_smoothing: 0.05
+    objectness_weight: 1.0
+    seed: 20260918
+    weight_decay: 0.05
+    gradient_clip: 1.0
+    warmup_fraction: 0.04
+    minimum_lr_ratio: 0.1
+    augmentation:
+      horizontal_flip_probability: 0.5
+      translation_fraction: 0.05
+      scale_range: [0.9, 1.1]
+      rotation_degrees: 10.0
+      brightness_range: [0.85, 1.15]
+      contrast_range: [0.85, 1.15]
+      saturation_range: [0.85, 1.15]
+      blur_probability: 0.1
+      jpeg_probability: 0.1
+  v7:
+    kind: dinov3_attention
+    seed_before_initialization: false
+    optimizer_backend: native
+    architecture: dinov3_vitl16
+    initialization_sha256: 8aa4cbddda325040fc78db2c272754af6ebe8ff2c55f6ec4f1964d8890f66035
+    attention_heads: 8
+    projection_dimensions: 1024
+    effective_batch: 96
+    draws_per_epoch: 68448
+    physical_batch: 32
+    workers: 8
+    trunk_lr: 0.00001
+    head_lr: 0.0001
+    layer_decay: 0.85
+    mean: [0.485, 0.456, 0.406]
+    std: [0.229, 0.224, 0.225]
+  siglip:
+    kind: image_tower
+    seed_before_initialization: true
+    optimizer_backend: fused_or_foreach
+    compile_mode: default
+    architecture: vit_large_patch16_siglip_384.v2_webli
+    pretrained_repo: timm/vit_large_patch16_siglip_384.v2_webli
+    pretrained_revision: 62eadefe185d74bd40be43b62d17a135ac417404
+    effective_batch: 192
+    draws_per_epoch: 68544
+    physical_batch: 64
+    workers: 20
+    prefetch_factor: 4
+    trunk_lr: 0.00001
+    head_lr: 0.0001
+    layer_decay: 0.9
+    warmup_fraction: 0.05
+    fused_sdpa: true
+    mean: [0.5, 0.5, 0.5]
+    std: [0.5, 0.5, 0.5]
+  hplus:
+    kind: dinov3_hplus_lora
+    seed_before_initialization: true
+    optimizer_backend: fused_or_foreach
+    architecture: dinov3_vith16plus
+    initialization_sha256: 7c1da9a54b3bdb333f5ebc42e404b7f19b1b5bed504877623c9dc87397f41488
+    input_size: 448
+    context_scale: 1.2
+    epochs: 8
+    warmup_epochs: 1
+    seed: 20260919
+    epoch_offset: 100
+    effective_batch: 192
+    draws_per_epoch: 68544
+    physical_batch: 64
+    workers: 20
+    prefetch_factor: 4
+    attention_heads: 8
+    projection_dimensions: 1024
+    adapter: {rank: 32, alpha: 32.0, dropout: 0.05}
+    adapter_lr: 0.0001
+    head_lr: 0.0003
+    weight_decay: 0.01
+    warmup_fraction: 0.05
+    minimum_lr_ratio: 0.1
+    gradient_clip: 1.0
+    mean: [0.485, 0.456, 0.406]
+    std: [0.229, 0.224, 0.225]

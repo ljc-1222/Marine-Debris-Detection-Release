@@ -1,0 +1,65 @@
+name: Repository hygiene
+
+permissions:
+  contents: read
+
+on:
+  pull_request:
+  push:
+
+jobs:
+  cpu-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+      - name: Install lightweight verification dependencies
+        run: python -m pip install PyYAML==6.0.3 Pillow==12.3.0 huggingface-hub==1.25.1 numpy==2.3.5 pycocotools==2.0.11
+      - name: Install CPU PyTorch
+        run: python -m pip install --index-url https://download.pytorch.org/whl/cpu torch==2.13.0
+      - name: Compile project modules
+        run: python -m compileall -q training inference postprocessing scoring scripts tests
+      - name: Test data preparation and checkpoint verification
+        run: |
+          python -m unittest discover -s tests -p test_data_preparation.py -v
+          python -m unittest discover -s tests -p test_checkpoints.py -v
+          python -m unittest discover -s tests -p test_release_contract.py -v
+          python -m unittest discover -s tests -p test_release_archive.py -v
+          python -m unittest discover -s tests -p test_postprocessing.py -v
+          python -m unittest discover -s tests -p test_dcr_records.py -v
+          python -m unittest discover -s tests -p test_sam_mask_migration.py -v
+          python -m unittest discover -s tests -p test_user_derived_inputs.py -v
+          python -m unittest discover -s tests -p test_scoring.py -v
+      - name: Test model exports
+        run: |
+          python -m unittest discover -s tests -p test_export_models.py -v
+          python -m unittest discover -s tests -p test_export_yolo26.py -v
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Check every proposed commit
+        env:
+          BEFORE: ${{ github.event.before }}
+          BASE_REF: ${{ github.base_ref }}
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+        run: |
+          bash scripts/check_repo_hygiene.sh --ref HEAD
+          if [[ "$GITHUB_EVENT_NAME" == pull_request ]]; then
+            range="origin/$BASE_REF..HEAD"
+          elif [[ -n "$BEFORE" && ! "$BEFORE" =~ ^0+$ ]] && git cat-file -e "$BEFORE^{commit}" 2>/dev/null; then
+            range="$BEFORE..HEAD"
+          elif base=$(git merge-base "origin/$DEFAULT_BRANCH" HEAD); then
+            range="$base..HEAD"
+          else
+            range=HEAD
+          fi
+          git rev-list --reverse "$range" | while read -r commit; do
+            bash scripts/check_repo_hygiene.sh --ref "$commit"
+          done

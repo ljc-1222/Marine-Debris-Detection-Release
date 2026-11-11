@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "historical_pipeline_sha256": "507c1869df8e314730b76c1737edcbcd679a9ba0b59eceaa996fa661d1a58858",
+  "package_pipeline_sha256": "9c1f08ce21b9fc0fc18fe3bbd9ea5c8464dbbcd1cd6755f33dc4227cc72d6eb7",
+  "package_pipeline_bytes": 1488871,
+  "remote": {
+    "repo_id": null,
+    "revision": null
+  }
+}

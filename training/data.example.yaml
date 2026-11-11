@@ -1,0 +1,68 @@
+schema_version: 1
+
+# Generate matching COCO, RF-DETR, and YOLO views with training.prepare_data.
+# All relative paths are resolved from this file. These files may contain only
+# the complete labeled training corpus; do not point any field at deployment images.
+class_names:
+  - plastic_bottle
+  - plastic_bottle_cap
+  - non_pet_food_beverage_container
+  - non_food_plastic_bottle
+  - takeaway_beverage_cup
+  - straw
+  - disposable_tableware
+  - plastic_bag
+  - food_wrapper
+  - metal_can
+  - cigarette_butt
+  - lighter
+  - drink_carton
+  - glass_bottle
+  - fishing_net_rope
+  - fishing_buoy_float
+  - fishing_gear
+  - syringe_needle
+  - toothbrush
+  - other
+  - plastic_lid
+  - cup
+  - foam_buoy_float
+  - cigarette_pack
+  - textile
+  - net_like_item
+  - anthropogenic_fragment
+  - disposable_food_container
+  - soft_float
+  - foam_container
+  - non_pet_food_container
+  - non_food_plastic_container
+  - aluminum_packaging
+  - fish_trap_and_bait
+
+coco:
+  images: ../data/images/train_all
+  # Standard COCO category IDs 1..34 (Co-DETR and RF-DETR).
+  annotations_1based: ../data/annotations/instances_train_all.json
+  # Equivalent view with category IDs 0..33 (TinyFormer).
+  annotations_0based: ../data/annotations/instances_train_all_0based.json
+  # source_group 0/1 and group-local IDs preserve the fixed ID protocol.
+  # Both groups are included in every full-data training run.
+
+tinyformer:
+  sam_object_bank: ../data/augmentation/sam_object_bank
+
+rfdetr:
+  # RF-DETR requires the storage names train/ and valid/. Both contain the
+  # same complete corpus; the trainer does not run a held-out evaluation.
+  dataset_dir: ../data/rfdetr_train_all
+  sam_mask_annotations: ../data/augmentation/instances_train_sam.json
+  sam_image_root: ../data/images/train_all
+
+yolo26:
+  # The required Ultralytics train/val YAML keys both reference all images.
+  dataset_yaml: ../data/yolo_train_all.yaml
+
+dcr:
+  records: ../data/dcr/train_all.records.jsonl
+  # The preparer writes this identity beside the portable records.
+  manifest: ../data/dcr/train_all.records.manifest.json

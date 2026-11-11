@@ -1,0 +1,12 @@
+[submodule "third_party/TinyFormer"]
+	path = third_party/TinyFormer
+	url = https://github.com/mmpmmpmmpjosh/TinyFormer.git
+[submodule "third_party/Co-DETR"]
+	path = third_party/Co-DETR
+	url = https://github.com/ljc-1222/Co-DETR.git
+[submodule "third_party/dinov3"]
+	path = third_party/dinov3
+	url = https://github.com/facebookresearch/dinov3.git
+[submodule "third_party/ultralytics"]
+	path = third_party/ultralytics
+	url = https://github.com/ultralytics/ultralytics.git

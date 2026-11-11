@@ -1,0 +1,227 @@
+{
+  "schema_version": 3,
+  "head_order": [
+    "hplus",
+    "v7",
+    "siglip"
+  ],
+  "beta": 0.375,
+  "numerics": {
+    "epsilon": 1e-8,
+    "class_logits_normalization": "softmax",
+    "objectness_logits_normalization": "sigmoid",
+    "objectness_logit_clip": [-50.0, 50.0],
+    "probability_cache_dtype": "float32",
+    "fusion_computation_dtype": "float64",
+    "fused_class_probability_dtype": "float32",
+    "fused_objectness_dtype": "float32",
+    "normalize_fused_class_probabilities": false,
+    "objectness_fusion": "weighted_log_odds",
+    "invalid_hplus_weight": "zero_then_renormalize",
+    "invalid_hplus_consensus_vote": -1
+  },
+  "finalizer": {
+    "iou": 0.5,
+    "mode": "soft_gaussian",
+    "sigma": 0.25,
+    "gaussian_decay_scope": "all_overlaps",
+    "tie_break": "input_ordinal",
+    "threshold": 0.001,
+    "topk": 100
+  },
+  "fusion": {
+    "family": "geometric",
+    "weights": {
+      "hplus": 0.875,
+      "v7": 0.125,
+      "siglip": 0
+    }
+  },
+  "ranking": {
+    "objectness": 0.125
+  },
+  "rescue": {
+    "mode": "add",
+    "consensus": 3,
+    "ratio": 1.5,
+    "qmin": 0.2,
+    "gamma": 0.5
+  },
+  "class_id_space": "classifier_0_based",
+  "class_rescue_overrides": {
+    "0": {
+      "mode": "add",
+      "consensus": 2,
+      "ratio": 3,
+      "qmin": 0.3,
+      "gamma": 0.5
+    },
+    "1": {
+      "mode": "add",
+      "consensus": 3,
+      "ratio": 1.5,
+      "qmin": 0.2,
+      "gamma": 0.75
+    },
+    "2": {
+      "mode": "add",
+      "consensus": 3,
+      "ratio": 1.5,
+      "qmin": 0.2,
+      "gamma": 0.75
+    },
+    "3": {
+      "mode": "add",
+      "consensus": 3,
+      "ratio": 1.5,
+      "qmin": 0.2,
+      "gamma": 0.75
+    },
+    "7": {
+      "mode": "add",
+      "consensus": 2,
+      "ratio": 3,
+      "qmin": 0.3,
+      "gamma": 0.5
+    },
+    "8": {
+      "mode": "add",
+      "consensus": 3,
+      "ratio": 1.5,
+      "qmin": 0.2,
+      "gamma": 0.75
+    },
+    "9": {
+      "mode": "swap",
+      "consensus": 3,
+      "ratio": 3,
+      "qmin": 0.2,
+      "gamma": 1
+    },
+    "10": {
+      "mode": "swap",
+      "consensus": 3,
+      "ratio": 2,
+      "qmin": 0.2,
+      "gamma": 1
+    },
+    "12": {
+      "mode": "swap",
+      "consensus": 3,
+      "ratio": 2,
+      "qmin": 0.2,
+      "gamma": 1
+    },
+    "13": {
+      "mode": "swap",
+      "consensus": 3,
+      "ratio": 2,
+      "qmin": 0.2,
+      "gamma": 1
+    },
+    "14": {
+      "mode": "add",
+      "consensus": 3,
+      "ratio": 3,
+      "qmin": 0.2,
+      "gamma": 0.5
+    },
+    "15": {
+      "mode": "add",
+      "consensus": 3,
+      "ratio": 3,
+      "qmin": 0.2,
+      "gamma": 0.75
+    },
+    "19": {
+      "mode": "add",
+      "consensus": 3,
+      "ratio": 3,
+      "qmin": 0.2,
+      "gamma": 0.75
+    },
+    "21": {
+      "mode": "add",
+      "consensus": 3,
+      "ratio": 1.5,
+      "qmin": 0.2,
+      "gamma": 0.75
+    },
+    "22": {
+      "mode": "add",
+      "consensus": 3,
+      "ratio": 2,
+      "qmin": 0.2,
+      "gamma": 0.5
+    },
+    "24": {
+      "mode": "add",
+      "consensus": 2,
+      "ratio": 2,
+      "qmin": 0.3,
+      "gamma": 0.5
+    },
+    "25": {
+      "mode": "swap",
+      "consensus": 3,
+      "ratio": 3,
+      "qmin": 0.2,
+      "gamma": 1
+    },
+    "26": {
+      "mode": "add",
+      "consensus": 3,
+      "ratio": 2,
+      "qmin": 0.2,
+      "gamma": 0.75
+    },
+    "27": {
+      "mode": "add",
+      "consensus": 3,
+      "ratio": 3,
+      "qmin": 0.2,
+      "gamma": 0.75
+    },
+    "28": {
+      "mode": "add",
+      "consensus": 3,
+      "ratio": 2,
+      "qmin": 0.2,
+      "gamma": 0.75
+    },
+    "29": {
+      "mode": "add",
+      "consensus": 3,
+      "ratio": 2,
+      "qmin": 0.2,
+      "gamma": 0.5
+    },
+    "30": {
+      "mode": "add",
+      "consensus": 3,
+      "ratio": 1.5,
+      "qmin": 0.2,
+      "gamma": 0.75
+    },
+    "31": {
+      "mode": "swap",
+      "consensus": 3,
+      "ratio": 2,
+      "qmin": 0.2,
+      "gamma": 1
+    }
+  },
+  "class_merge": {
+    "policy_evaluation_scope": "full_candidate_bank",
+    "selection_key": "emitted_classifier_label",
+    "finalize_policy_before_class_selection": true,
+    "policy_topk_scope": "per_image_per_class",
+    "policy_max_detections_per_class": 100,
+    "score_threshold": 0,
+    "max_detections": 100,
+    "box_dtype": "float32",
+    "score_dtype": "float64",
+    "class_order": "ascending",
+    "tie_break": "class_concatenation_ordinal"
+  }
+}

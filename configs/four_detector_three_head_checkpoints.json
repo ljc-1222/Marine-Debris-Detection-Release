@@ -1,0 +1,299 @@
+{
+  "schema_version": 2,
+  "default_group": "final",
+  "project_license": "Apache-2.0",
+  "release_status": "available",
+  "groups": {
+    "final": [
+      "codetr",
+      "tinyformer",
+      "rfdetr",
+      "yolo26",
+      "hplus",
+      "v7",
+      "siglip"
+    ],
+    "all": [
+      "codetr",
+      "tinyformer",
+      "rfdetr",
+      "yolo26",
+      "hplus",
+      "v7",
+      "siglip"
+    ]
+  },
+  "artifacts": {
+    "codetr": {
+      "display_name": "Co-DETR (Co-DINO ViT-L/16)",
+      "path": "checkpoints/detectors/co-detr-vit-l16.pth",
+      "bytes": 1466410081,
+      "sha256": "79fe54c0e7aa4f7a53d2de6a3d4de69bc4258935c12fba07e3da72d387802706",
+      "architecture": "Co-DINO 5-scale ViT-L/16",
+      "source": "Co-DETR@a3a9d20b7b2e19ad6e140590a6e3d8f2d3c88e9b",
+      "recipe": "training/final_recipes.yaml#detectors.codetr",
+      "role": "detector_final",
+      "serialization": "Version-1 tensor and primitive dictionary; training state and machine paths removed; complete inference state retained.",
+      "license_notice": "THIRD_PARTY_NOTICES.md",
+      "redistribution_policy": "Retain Apache-2.0 licence, applicable notices and modification information; project/data rights remain separate.",
+      "upstream_terms": {
+        "code": "MIT",
+        "initializer_weights": "Apache-2.0"
+      },
+      "training": {
+        "completed_epochs": 20,
+        "recorded_artifact_epoch": 20,
+        "successful_optimizer_updates": 10375,
+        "variant": "ema"
+      },
+      "license_files": [
+        "licenses/Co-DETR-MIT.txt",
+        "licenses/Apache-2.0.txt"
+      ],
+      "hf": {
+        "repo_id": "ljc-1222/marine-debris-detection",
+        "repo_type": "model",
+        "revision": "57c9cbe1e1124a16747f5f4f0b836fc056ec504c",
+        "filename": "checkpoints/detectors/co-detr-vit-l16.pth"
+      },
+      "release_status": "available",
+      "source_checkpoint": {
+        "sha256": "d2dc1327b4478ed6f32ad1c2baaea58f5c21ab0f3a478c74edda05c48ed5ded1",
+        "bytes": 5854609109
+      },
+      "metadata_notice": "Release packaging changes bytes; retained inference tensors match the selected source state exactly. No optimizer, RNG or training-machine paths are included."
+    },
+    "tinyformer": {
+      "display_name": "TinyFormer-XL-PBM",
+      "path": "checkpoints/detectors/tinyformer-xl-pbm.pth",
+      "bytes": 509118087,
+      "sha256": "9d57621cde3682d3952cdbc1ca53c493dd41f40adcf4281bf06b468eb8014a82",
+      "architecture": "TinyFormer-XL-PBM (DINOv3 ViT-B/16 backbone)",
+      "source": "TinyFormer@9075d9fdf5ce989ca3c7e830a780dfc7fbbe4ec1",
+      "recipe": "training/final_recipes.yaml#detectors.tinyformer",
+      "role": "detector_final",
+      "serialization": "Version-1 tensor and primitive dictionary; training state and machine paths removed; complete inference state retained.",
+      "license_notice": "THIRD_PARTY_NOTICES.md",
+      "redistribution_policy": "Preserve the publisher Apache license, applicable notices and modifications, and the DINOv3 Agreement; see the repository/model-zoo interpretation in THIRD_PARTY_NOTICES.md.",
+      "upstream_terms": {
+        "code": "Apache-2.0 AND LicenseRef-DINOv3",
+        "complete_checkpoint_weights": "Apache-2.0 for publisher contributions, with LicenseRef-DINOv3 on included DINOv3 materials"
+      },
+      "training": {
+        "fixed_recipe_epochs": 20,
+        "recorded_artifact_epoch": 21,
+        "recorded_last_epoch": 20,
+        "epoch_counter_provenance": {
+          "fixed_recipe_epochs": "Epoch budget from training/final_recipes.yaml#detectors.tinyformer.epochs.",
+          "recorded_artifact_epoch": "Historical run-summary epoch counter.",
+          "recorded_last_epoch": "Native checkpoint epoch counter, retained as stored."
+        },
+        "global_step": 5200,
+        "variant": "ema"
+      },
+      "license_files": [
+        "licenses/TinyFormer-root-LICENSE.txt",
+        "licenses/DINOv3-LICENSE.md"
+      ],
+      "hf": {
+        "repo_id": "ljc-1222/marine-debris-detection",
+        "repo_type": "model",
+        "revision": "57c9cbe1e1124a16747f5f4f0b836fc056ec504c",
+        "filename": "checkpoints/detectors/tinyformer-xl-pbm.pth"
+      },
+      "release_status": "available",
+      "source_checkpoint": {
+        "sha256": "d67e23be3edd2e5065da4cbed245c9a2475c3e55444bd556583c9c300a9d60ab",
+        "bytes": 509077381
+      },
+      "metadata_notice": "Release packaging changes bytes; retained inference tensors match the selected source state exactly. No optimizer, RNG or training-machine paths are included."
+    },
+    "rfdetr": {
+      "display_name": "RF-DETR Legacy Large",
+      "path": "checkpoints/detectors/rf-detr-legacy-large.pth",
+      "bytes": 541547795,
+      "sha256": "ec8b28911415aea7ab70ff33d204d052c8202cf2cc9d1e15f91ed8860038e6e4",
+      "architecture": "RFDETRLargeDeprecated",
+      "source": "rfdetr==1.9.0",
+      "recipe": "training/final_recipes.yaml#detectors.rfdetr",
+      "role": "detector_final",
+      "serialization": "Version-1 tensor and primitive dictionary; training state and machine paths removed; complete inference state retained.",
+      "license_notice": "THIRD_PARTY_NOTICES.md",
+      "redistribution_policy": "Retain Apache-2.0 licence, applicable notices and modification information; not the newer PML Plus model.",
+      "upstream_terms": {
+        "code": "Apache-2.0",
+        "legacy_large_initializer_weights": "Apache-2.0"
+      },
+      "training": {
+        "fixed_recipe_epochs": 40,
+        "recorded_artifact_epoch": 41,
+        "recorded_last_epoch": 40,
+        "epoch_counter_provenance": {
+          "fixed_recipe_epochs": "Epoch budget from training/final_recipes.yaml#detectors.rfdetr.epochs.",
+          "recorded_artifact_epoch": "Historical run-summary epoch counter.",
+          "recorded_last_epoch": "Native checkpoint epoch counter, retained as stored."
+        },
+        "global_step": 10400,
+        "variant": "ema"
+      },
+      "license_files": [
+        "licenses/RF-DETR-Apache-2.0.txt"
+      ],
+      "hf": {
+        "repo_id": "ljc-1222/marine-debris-detection",
+        "repo_type": "model",
+        "revision": "57c9cbe1e1124a16747f5f4f0b836fc056ec504c",
+        "filename": "checkpoints/detectors/rf-detr-legacy-large.pth"
+      },
+      "release_status": "available",
+      "source_checkpoint": {
+        "sha256": "91d9b8b4018044abd81a31682724af309725368434bd37a8881453f4457b6d68",
+        "bytes": 541533863
+      },
+      "metadata_notice": "Release packaging changes bytes; retained inference tensors match the selected source state exactly. No optimizer, RNG or training-machine paths are included."
+    },
+    "yolo26": {
+      "display_name": "YOLO26x",
+      "path": "checkpoints/detectors/yolo26x.pt",
+      "bytes": 118371787,
+      "sha256": "efca28c2e5b8abafd211fd93724c11b6847fcf99d5874cd69fd60f4ae39be695",
+      "architecture": "YOLO26x",
+      "source": "ultralytics@dad7bb4534c95021bc14969ab25d77b77c4efdc3",
+      "recipe": "training/final_recipes.yaml#detectors.yolo26",
+      "role": "detector_final",
+      "serialization": "Version-1 tensor and primitive dictionary; training state and machine paths removed; complete inference state retained.",
+      "license_notice": "THIRD_PARTY_NOTICES.md",
+      "redistribution_policy": "Resolve corresponding-source, notices and combined-work obligations before public distribution; no Enterprise rights assumed.",
+      "upstream_terms": {
+        "code_and_weights": "AGPL-3.0; alternatively a separately applicable Enterprise agreement"
+      },
+      "training": {
+        "recorded_artifact_role": "best",
+        "recorded_artifact_epoch": 7,
+        "global_step": 14546,
+        "variant": "ema",
+        "recorded_last_epoch": 8,
+        "recorded_last_global_step": 16624
+      },
+      "license_files": [
+        "licenses/Ultralytics-AGPL-3.0.txt"
+      ],
+      "hf": {
+        "repo_id": "ljc-1222/marine-debris-detection",
+        "repo_type": "model",
+        "revision": "57c9cbe1e1124a16747f5f4f0b836fc056ec504c",
+        "filename": "checkpoints/detectors/yolo26x.pt"
+      },
+      "release_status": "available",
+      "source_checkpoint": {
+        "sha256": "391f602eb5a7803e4ff1ed71477dd650480ec58aad1ac0bec6b7e86b8fd7d55d",
+        "bytes": 251764542
+      },
+      "metadata_notice": "Release packaging changes bytes; retained inference tensors match the selected source state exactly. No optimizer, RNG or training-machine paths are included."
+    },
+    "hplus": {
+      "display_name": "DINOv3 ViT-H+/16 (LoRA)",
+      "path": "checkpoints/classifiers/dinov3-vit-h16plus-lora.pt",
+      "bytes": 3510364211,
+      "sha256": "bbe3a0f6b8782aca313caa524d8c05d2396c1a80c73f5ac34afd878489164e75",
+      "role": "classifier_final_full_model",
+      "architecture": "DINOv3 ViT-H+/16",
+      "serialization": "Version-1 tensor and primitive dictionary; training state and machine paths removed; complete inference state retained. Frozen official backbone, unmerged LoRA adapters and head included; no separate upstream weight download is needed for inference.",
+      "license_notice": "THIRD_PARTY_NOTICES.md",
+      "redistribution_policy": "Redistribution subject to DINOv3 Agreement, accompanying agreement and use restrictions; project contributions separately licensed.",
+      "upstream_terms": {
+        "backbone_and_derivatives": "LicenseRef-DINOv3"
+      },
+      "training": {
+        "epochs": 8,
+        "variant": "terminal independent full-data refit"
+      },
+      "license_files": [
+        "licenses/DINOv3-LICENSE.md"
+      ],
+      "hf": {
+        "repo_id": "ljc-1222/marine-debris-detection",
+        "repo_type": "model",
+        "revision": "57c9cbe1e1124a16747f5f4f0b836fc056ec504c",
+        "filename": "checkpoints/classifiers/dinov3-vit-h16plus-lora.pt"
+      },
+      "release_status": "available",
+      "source_checkpoint": {
+        "sha256": "82c13eb36c3387d342e0b6b9a4b68d618fb45b0bc02bfb853f411908b1982157",
+        "bytes": 147141670
+      },
+      "metadata_notice": "Release packaging changes bytes; retained inference tensors match the selected source state exactly. No optimizer, RNG or training-machine paths are included.",
+      "included_backbone": {
+        "sha256": "7c1da9a54b3bdb333f5ebc42e404b7f19b1b5bed504877623c9dc87397f41488",
+        "agreement": "licenses/DINOv3-LICENSE.md"
+      }
+    },
+    "v7": {
+      "display_name": "DINOv3 ViT-L/16",
+      "path": "checkpoints/classifiers/dinov3-vit-l16.pt",
+      "bytes": 1238435902,
+      "sha256": "ed1b786889757bc9a9dc7e25d313d0c7fade63da2d40eb6814784e4d1a720f32",
+      "role": "classifier_final_full_model",
+      "architecture": "DINOv3 ViT-L/16",
+      "serialization": "Version-1 tensor and primitive dictionary; training state and machine paths removed; complete inference state retained.",
+      "license_notice": "THIRD_PARTY_NOTICES.md",
+      "redistribution_policy": "Redistribution subject to DINOv3 Agreement, accompanying agreement and use restrictions; project contributions separately licensed.",
+      "upstream_terms": {
+        "backbone_and_derivatives": "LicenseRef-DINOv3"
+      },
+      "training": {
+        "epochs": 16,
+        "variant": "terminal full-data refit"
+      },
+      "license_files": [
+        "licenses/DINOv3-LICENSE.md"
+      ],
+      "hf": {
+        "repo_id": "ljc-1222/marine-debris-detection",
+        "repo_type": "model",
+        "revision": "57c9cbe1e1124a16747f5f4f0b836fc056ec504c",
+        "filename": "checkpoints/classifiers/dinov3-vit-l16.pt"
+      },
+      "release_status": "available",
+      "source_checkpoint": {
+        "sha256": "edcaab16578973167c456b0cf3533c9ae3aeb3b8399274f4fbff38491522e9e2",
+        "bytes": 1238434269
+      },
+      "metadata_notice": "Release packaging changes bytes; retained inference tensors match the selected source state exactly. No optimizer, RNG or training-machine paths are included."
+    },
+    "siglip": {
+      "display_name": "SigLIP 2 ViT-L/16 (384 px)",
+      "path": "checkpoints/classifiers/siglip2-vit-l16-384.pt",
+      "bytes": 1265412747,
+      "sha256": "2594977ee28fd0aa09fe568611be27c4f748e7b2d8c9b10b5339dae64571bbbb",
+      "role": "classifier_final_full_model",
+      "architecture": "vit_large_patch16_siglip_384.v2_webli",
+      "serialization": "Version-1 tensor and primitive dictionary; training state and machine paths removed; complete inference state retained.",
+      "license_notice": "THIRD_PARTY_NOTICES.md",
+      "redistribution_policy": "Retain Apache-2.0 licence, applicable notices and modification information; project contributions separately licensed.",
+      "upstream_terms": {
+        "timm_code_and_pinned_initializer": "Apache-2.0"
+      },
+      "training": {
+        "epochs": 16,
+        "variant": "terminal full-data refit"
+      },
+      "license_files": [
+        "licenses/timm-Apache-2.0.txt"
+      ],
+      "hf": {
+        "repo_id": "ljc-1222/marine-debris-detection",
+        "repo_type": "model",
+        "revision": "57c9cbe1e1124a16747f5f4f0b836fc056ec504c",
+        "filename": "checkpoints/classifiers/siglip2-vit-l16-384.pt"
+      },
+      "release_status": "available",
+      "source_checkpoint": {
+        "sha256": "c8028206462edc7123ad05eb4f38c7e7078668fb6633137edae4d02424aaefea",
+        "bytes": 1265423943
+      },
+      "metadata_notice": "Release packaging changes bytes; retained inference tensors match the selected source state exactly. No optimizer, RNG or training-machine paths are included."
+    }
+  },
+  "project_license_scope": "Original separable project source; third-party code, weights and datasets retain their own terms."
+}
